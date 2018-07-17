@@ -1,6 +1,6 @@
-require 'twitter'
+require 'dropbox_api'
 require 'net/http'
-
+require 'twitter'
 
 stream_client = Twitter::Streaming::Client.new do |config|
   config.consumer_key        = ENV['CONSUMER_KEY']
@@ -14,10 +14,9 @@ client = DropboxApi::Client.new(dropbox_access_token)
 
 search_criteria = '#planfmi'
 success_file = 'result.csv'
-# log_file = 'log.csv'
 
 def matched_criteria(tweet)
-  filter_keywords = ['rrhh', 'pm', 'psico', 'humanos', 'project', 'manager', 'recruiter', 'administra', 'cobranzas', 'banco', 'contador']
+  filter_keywords = ['test', 'pm', 'psico', 'humanos', 'project', 'manager', 'recruiter', 'administra', 'cobranzas', 'banco', 'contador']
   matched = nil
 
   filter_keywords.each do |x|
@@ -54,7 +53,9 @@ stream_client.filter(track: search_criteria) do |object|
       line = "#{object.created_at}, #{original_tweet_url(object)}, #{matched}, #{!object.retweeted_status.nil? ? 'RT' : ''}, #{!object.retweeted_status.nil? ? source_tweet_url(object) : ''}"
 
       unless matched.nil?
-        client.upload success_file, line, :mode => :add
+        open(success_file, 'a') { |f| f.puts line }
+        contents = IO.read(success_file)
+        client.upload "/#{success_file}", contents, :mode => :overwrite
       end
     end
   rescue => e
