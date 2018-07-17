@@ -9,7 +9,7 @@ stream_client = Twitter::Streaming::Client.new do |config|
   config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
 end
 
-search_criteria = '#PrimeDay'
+search_criteria = '#planfmi'
 success_file = 'trabajos.csv'
 # log_file = 'log.csv'
 
