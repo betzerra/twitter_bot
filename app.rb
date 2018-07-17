@@ -16,7 +16,7 @@ search_criteria = '#TrabajoAR'
 success_file = 'result.csv'
 
 def matched_criteria(tweet)
-  filter_keywords = ['pm', 'psico', 'humanos', 'project', 'manager', 'recruiter', 'administra', 'cobranzas', 'banco', 'contador']
+  filter_keywords = ['pm', 'psico', 'humanos', 'project', 'manager', 'recruiter', 'administra', 'rrhh']
   matched = nil
 
   filter_keywords.each do |x|
