@@ -9,8 +9,11 @@ stream_client = Twitter::Streaming::Client.new do |config|
   config.access_token_secret = ENV['ACCESS_TOKEN_SECRET']
 end
 
+dropbox_access_token = ENV['DROPBOX_ACCESS_TOKEN']
+client = DropboxApi::Client.new(dropbox_access_token)
+
 search_criteria = '#planfmi'
-success_file = 'trabajos.csv'
+success_file = 'result.csv'
 # log_file = 'log.csv'
 
 def matched_criteria(tweet)
@@ -42,23 +45,17 @@ end
 stream_client.filter(track: search_criteria) do |object|
   begin
     if object.is_a?(Twitter::Tweet)
-      puts "#{object.created_at} - #{object.text}"
+      puts "#{object.text}"
 =begin
       matched = matched_criteria(object)
+=end
+      matched = 'test'
 
       line = "#{object.created_at}, #{original_tweet_url(object)}, #{matched}, #{!object.retweeted_status.nil? ? 'RT' : ''}, #{!object.retweeted_status.nil? ? source_tweet_url(object) : ''}"
 
-      if matched.nil?
-        open(log_file, 'a') { |f|
-          f.puts line
-        }
-      else
-        open(success_file, 'a') { |f|
-          f.puts line
-        }
-        system("./dropbox_uploader.sh upload #{success_file} /")
+      unless matched.nil?
+        client.upload success_file, line, :mode => :add
       end
-=end
     end
   rescue => e
     puts e
