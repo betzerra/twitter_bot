@@ -12,11 +12,11 @@ end
 dropbox_access_token = ENV['DROPBOX_ACCESS_TOKEN']
 client = DropboxApi::Client.new(dropbox_access_token)
 
-search_criteria = '#planfmi'
+search_criteria = '#TrabajoAR'
 success_file = 'result.csv'
 
 def matched_criteria(tweet)
-  filter_keywords = ['test', 'pm', 'psico', 'humanos', 'project', 'manager', 'recruiter', 'administra', 'cobranzas', 'banco', 'contador']
+  filter_keywords = ['pm', 'psico', 'humanos', 'project', 'manager', 'recruiter', 'administra', 'cobranzas', 'banco', 'contador']
   matched = nil
 
   filter_keywords.each do |x|
@@ -45,10 +45,8 @@ stream_client.filter(track: search_criteria) do |object|
   begin
     if object.is_a?(Twitter::Tweet)
       puts "#{object.text}"
-=begin
+
       matched = matched_criteria(object)
-=end
-      matched = 'test'
 
       line = "#{object.created_at}, #{original_tweet_url(object)}, #{matched}, #{!object.retweeted_status.nil? ? 'RT' : ''}, #{!object.retweeted_status.nil? ? source_tweet_url(object) : ''}"
 
