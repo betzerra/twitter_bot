@@ -42,7 +42,7 @@ end
 stream_client.filter(track: search_criteria) do |object|
   begin
     if object.is_a?(Twitter::Tweet)
-      puts
+      puts object.text
 =begin
       matched = matched_criteria(object)
 
